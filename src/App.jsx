@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { ARTIKEL } from "./artikel.js";
 
 const CONFIG = {
-  STRIPE_PAYMENT_LINK: "https://buy.stripe.com/4gM28r2qn26hf7a0MzgUM00",
+  STRIPE_PAYMENT_LINK: "https://buy.stripe.com/HIER_DEINEN_PAYMENT_LINK_EINTRAGEN",
   PREIS: 7.99,
   RICHTWERTE: {
     gesamt: 2.67, heizung_warmwasser: 1.32, heizung_max: 2.18,
@@ -912,6 +912,15 @@ export default function App() {
                       </span>
                     </label>
                   </div>
+                  {/* E-Mail-Versand prominent */}
+                  <div style={{ background: C.greenBg, border: "1px solid " + C.green + "40", borderRadius: 10, padding: "12px 16px", marginBottom: 14, display: "flex", gap: 12, alignItems: "flex-start" }}>
+                    <span style={{ fontSize: 22, flexShrink: 0, lineHeight: 1 }}>✉</span>
+                    <div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 3 }}>Brief und Bericht per E-Mail erhalten</div>
+                      <div style={{ fontSize: 12, color: C.muted, lineHeight: 1.55 }}>Nach der Zahlung senden wir Ihnen Brief und Prüfbericht direkt per E-Mail — damit Sie jederzeit darauf zugreifen können, auch wenn Sie den Tab schließen.</div>
+                    </div>
+                  </div>
+
                   {/* Preis, Lieferung, Anbieter — Pflichtangaben vor Kaufabschluss */}
                   <div style={{ fontSize: 11, color: C.dim, marginBottom: 12, lineHeight: 1.7, textAlign: "center" }}>
                     Gesamtpreis: <strong style={{ color: C.text }}>€{CONFIG.PREIS.toFixed(2)}</strong> · Sofortiger Zugang nach Zahlung<br/>
@@ -1107,8 +1116,11 @@ export default function App() {
               Damit Sie jederzeit auf Ihren Brief und Bericht zugreifen können — auch wenn Sie diesen Tab schließen.
             </div>
             {emailSent ? (
-              <div style={{ background: C.greenBg, border: "1px solid " + C.green + "40", borderRadius: 8, padding: "10px 14px", fontSize: 13, color: C.green, fontWeight: 600 }}>
-                ✓ E-Mail wurde gesendet an {emailInput}
+              <div style={{ background: C.greenBg, border: "1px solid " + C.green + "40", borderRadius: 8, padding: "12px 14px" }}>
+                <div style={{ fontSize: 13, color: C.green, fontWeight: 700, marginBottom: 4 }}>✓ E-Mail wurde gesendet an {emailInput}</div>
+                <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
+                  Falls die E-Mail nicht im Posteingang erscheint, prüfen Sie bitte Ihren <strong>Spam-Ordner</strong> und markieren Sie die E-Mail als "Kein Spam".
+                </div>
               </div>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -1286,6 +1298,8 @@ export default function App() {
             "Der Preis beträgt " + CONFIG.PREIS.toFixed(2) + " Euro. Stefan Hennig ist Kleinunternehmer gemäß § 19 UStG; es wird keine Umsatzsteuer ausgewiesen.",
             "Zahlung über Stripe Payments Europe, Ltd. Akzeptierte Methoden: Kreditkarte, SEPA-Lastschrift u.a.",
             "Einmalzahlung — kein Abo, keine Folgekosten.",
+            "Nach jeder Zahlung erhalten Sie automatisch einen Zahlungsbeleg per E-Mail. Auf Anfrage stellen wir gerne eine Rechnung aus: support@nebenkostenradar.com",
+            "Stefan Hennig ist Kleinunternehmer gemäß § 19 UStG — es wird keine Umsatzsteuer ausgewiesen und keine Umsatzsteuer berechnet.",
           ]},
           { t: "§ 5 Lieferung und Zugang", lines: [
             "Der Vollbericht wird sofort nach erfolgreicher Zahlung im Browser freigeschaltet.",
