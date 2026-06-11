@@ -97,19 +97,7 @@ const fmt = n => (n != null && !isNaN(n)) ? "€ " + parseFloat(n || 0).toFixed(
 const pct = (a, b) => b > 0 ? Math.round((a / b) * 100) : 0;
 
 function checkPaidReturn() {
-  try {
-    const paid = new URLSearchParams(window.location.search).get("paid") === "true";
-    if (!paid) return false;
-    // Prüfe ob Kauf innerhalb der letzten 30 Minuten gestartet wurde
-    const ts = parseInt(localStorage.getItem("kaufTs") || "0");
-    const alter = Date.now() - ts;
-    const gueltig = alter < 30 * 60 * 1000; // 30 Minuten
-    if (gueltig) {
-      localStorage.removeItem("kaufTs");
-      return true;
-    }
-    return false;
-  } catch { return false; }
+  return false; // Freischaltung nur über manuellen Button
 }
 
 const BEWERTUNG = {
@@ -502,8 +490,8 @@ export default function App() {
     }
     if (IS_DEMO) { setUnlocked(true); return; }
     setPayPending(true);
-    try { localStorage.setItem("kaufTs", Date.now().toString()); } catch {}
-    window.open(CONFIG.STRIPE_PAYMENT_LINK + "?success_url=" + encodeURIComponent(window.location.href.split("?")[0] + "?paid=true"), "_blank");
+
+    window.open(CONFIG.STRIPE_PAYMENT_LINK, "_blank");
   }
 
   function resetAll() {
