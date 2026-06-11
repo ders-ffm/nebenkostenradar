@@ -262,7 +262,7 @@ function Field({ label, value, onChange, type = "text", placeholder, error, tip,
           onChange={e => onChange(e.target.value)}
           onFocus={e => { setFocused(true); e.target.style.borderColor = C.gold; }}
           onBlur={e => { setFocused(false); e.target.style.borderColor = error ? C.red : C.border; }}
-          style={{ width: "100%", boxSizing: "border-box", background: error ? C.redBg : C.high, border: "1.5px solid " + (error ? C.red : C.border), borderRadius: 10, padding: "12px " + (suffix ? "36px" : "14px") + " 12px " + (prefix ? "28px" : "14px"), fontSize: 15, fontFamily: "inherit", color: C.text, outline: "none" }} />
+          style={{ width: "100%", boxSizing: "border-box", background: error ? C.redBg : "#ffffff", border: "1.5px solid " + (error ? C.red : C.border), borderRadius: 10, padding: "12px " + (suffix ? "36px" : "14px") + " 12px " + (prefix ? "28px" : "14px"), fontSize: 15, fontFamily: "inherit", color: C.text, outline: "none", WebkitAppearance: "none", MozAppearance: "textfield" }} />
         {suffix && <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: C.muted, pointerEvents: "none" }}>{suffix}</span>}
       </div>
     </div>
@@ -273,7 +273,7 @@ function EuroInput({ label, value, onChange, tip, pflicht, warn }) {
   const [focused, setFocused] = useState(false);
   const filled = toNum(value) > 0;
   return (
-    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "10px 12px", marginBottom: 6, background: warn ? C.redBg : filled ? "#161610" : C.surface, border: "1.5px solid " + (warn ? C.red : focused ? C.gold : filled ? C.goldD + "66" : C.border), borderRadius: 10 }}>
+    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: "10px 12px", marginBottom: 6, background: warn ? C.redBg : filled ? "#f0faf4" : C.surface, border: "1.5px solid " + (warn ? C.red : focused ? C.green : filled ? C.green + "66" : C.border), borderRadius: 10 }}>
       <div style={{ flex: 1, minWidth: 0, marginRight: 10, paddingTop: 2 }}>
         <div style={{ fontSize: 13, color: filled ? C.text : C.muted, fontWeight: filled ? 600 : 400 }}>
           {label}
@@ -287,7 +287,7 @@ function EuroInput({ label, value, onChange, tip, pflicht, warn }) {
         <input type="number" min="0" step="0.01" placeholder="0,00" value={value || ""}
           onChange={e => onChange(e.target.value)}
           onFocus={() => setFocused(true)} onBlur={() => setFocused(false)}
-          style={{ width: 90, background: "transparent", border: "1px solid " + (focused ? C.gold : C.border), borderRadius: 7, padding: "7px 8px", fontSize: 14, fontFamily: "inherit", color: C.text, textAlign: "right", outline: "none" }} />
+          style={{ width: 90, background: "#ffffff", border: "1px solid " + (focused ? C.green : C.border), borderRadius: 7, padding: "7px 8px", fontSize: 14, fontFamily: "inherit", color: C.text, textAlign: "right", outline: "none", WebkitAppearance: "none", MozAppearance: "textfield" }} />
       </div>
     </div>
   );
@@ -705,7 +705,7 @@ export default function App() {
       <div style={{ padding: "14px 20px 0" }}>
         <h2 style={{ fontSize: 20, fontWeight: 400, margin: "0 0 4px" }}>Posten aus deiner Abrechnung</h2>
         <p style={{ fontSize: 12, color: C.muted, margin: "0 0 12px" }}>Trage die Beträge so ein wie sie auf der Abrechnung stehen. ✦ = Pflichtfeld.</p>
-        <div style={{ background: C.high, border: "1px solid " + (total > 0 ? C.goldD : C.border), borderRadius: 10, padding: "11px 16px", marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "#ffffff", border: "1px solid " + (total > 0 ? C.green : C.border), borderRadius: 10, padding: "11px 16px", marginBottom: 12, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <div style={{ fontSize: 10, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em" }}>Eingegeben</div>
             <div style={{ fontSize: 21, fontWeight: 700, color: total > 0 ? C.gold : C.dim }}>{total > 0 ? fmt(total) : "€ 0,00"}</div>
@@ -728,7 +728,7 @@ export default function App() {
           return (
             <div key={gruppe.id} style={{ marginBottom: 8 }}>
               <button onClick={() => setOpenGruppe(isOpen ? null : gruppe.id)}
-                style={{ width: "100%", background: C.surface, border: "1px solid " + (groupSum > 0 ? C.goldD : C.border), borderRadius: isOpen ? "10px 10px 0 0" : 10, padding: "12px 14px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer", textAlign: "left" }}>
+                style={{ width: "100%", background: C.surface, border: "1px solid " + (groupSum > 0 ? C.green : C.border), borderRadius: isOpen ? "10px 10px 0 0" : 10, padding: "12px 14px", display: "flex", alignItems: "center", gap: 10, cursor: "pointer", textAlign: "left" }}>
                 <span style={{ fontSize: 19 }}>{gruppe.icon}</span>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{gruppe.label}</div>
@@ -738,7 +738,7 @@ export default function App() {
                 <span style={{ color: C.dim, fontSize: 15, transform: isOpen ? "rotate(90deg)" : "none" }}>›</span>
               </button>
               {isOpen && (
-                <div style={{ background: C.high, border: "1px solid " + C.border, borderTop: "none", borderRadius: "0 0 10px 10px", padding: "10px 12px" }}>
+                <div style={{ background: "#ffffff", border: "1px solid " + C.border, borderTop: "none", borderRadius: "0 0 10px 10px", padding: "10px 12px" }}>
                   {gruppe.posten.map(p => (
                     <EuroInput key={p.key} label={p.label} value={werte[p.key]} tip={p.tip} pflicht={p.pflicht}
                       warn={p.key === "kabelanschluss" && toNum(werte[p.key]) > 0}
@@ -751,7 +751,7 @@ export default function App() {
         })}
       </div>
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, background: "#ffffff", padding: "20px 20px 24px", borderTop: "1px solid #dde1e7", boxShadow: "0 -4px 20px rgba(0,0,0,0.06)" }}>
-        <Btn onClick={() => { if (validatePosten()) { setErrors({}); setSubmitAttempted(false); runAnalyse(); } }} style={{ background: filledPosten > 0 ? C.gold : "#2a2a2a", color: filledPosten > 0 ? "#0f0f0f" : C.dim }}>
+        <Btn onClick={() => { if (validatePosten()) { setErrors({}); setSubmitAttempted(false); runAnalyse(); } }} style={{ background: filledPosten > 0 ? C.green : C.surface, color: filledPosten > 0 ? "#ffffff" : C.dim }}>
           {filledPosten === 0 ? "Posten eingeben um fortzufahren" : filledPosten + " Posten analysieren →"}
         </Btn>
       </div>
@@ -870,7 +870,7 @@ export default function App() {
               ) : (
                 <div>
                   {/* Widerrufsbelehrung + Checkbox — Pflicht nach § 356 Abs. 5 BGB */}
-                  <div style={{ background: C.high, border: "1px solid " + C.border, borderRadius: 10, padding: "12px 14px", marginBottom: 12 }}>
+                  <div style={{ background: "#f8f9fa", border: "1px solid " + C.border, borderRadius: 10, padding: "12px 14px", marginBottom: 12 }}>
                     <label style={{ display: "flex", alignItems: "flex-start", gap: 10, cursor: "pointer" }}>
                       <input type="checkbox" checked={widerrufsCheckbox} onChange={e => setWiderrufsCheckbox(e.target.checked)} aria-label="Zustimmung zur sofortigen Vertragsausführung und Verlust des Widerrufsrechts" aria-required="true"
                         style={{ marginTop: 3, flexShrink: 0, width: 16, height: 16, cursor: "pointer", accentColor: C.gold }} />
