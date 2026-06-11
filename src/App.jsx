@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { ARTIKEL } from "./artikel.js";
 
 const CONFIG = {
-  STRIPE_PAYMENT_LINK: "https://buy.stripe.com/4gM28r2qn26hf7a0MzgUM00",
+  STRIPE_PAYMENT_LINK: "https://buy.stripe.com/HIER_DEINEN_PAYMENT_LINK_EINTRAGEN",
   PREIS: 7.99,
   RICHTWERTE: {
     gesamt: 2.67, heizung_warmwasser: 1.32, heizung_max: 2.18,
@@ -338,6 +338,11 @@ export default function App() {
   const [reportContent, setReportContent] = useState("");
   const [reportCopied, setReportCopied] = useState(false);
   const [widerrufsCheckbox, setWiderrufsCheckbox] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
+  const [emailConfirm, setEmailConfirm] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [emailSending, setEmailSending] = useState(false);
+  const [emailError, setEmailError] = useState("");
   const [ratgeberArtikel, setRatgeberArtikel] = useState(null);
 
   const [wohnung, setWohnung] = useState({ flaeche: "", jahr: String(new Date().getFullYear() - 1), vorauszahlung: "" });
@@ -448,6 +453,34 @@ export default function App() {
     ];
     setReportContent(lines.join("\n"));
     setStep("bericht");
+  }
+
+  async function handleEmailSenden(briefText, berichtText) {
+    if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
+      setEmailError("Bitte gültige E-Mail-Adresse eingeben");
+      return;
+    }
+    if (emailInput !== emailConfirm) {
+      setEmailError("E-Mail-Adressen stimmen nicht überein");
+      return;
+    }
+    setEmailSending(true);
+    setEmailError("");
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailInput, briefText, berichtText }),
+      });
+      if (res.ok) {
+        setEmailSent(true);
+      } else {
+        setEmailError("Fehler beim Senden — bitte später nochmal versuchen");
+      }
+    } catch {
+      setEmailError("Netzwerkfehler — bitte prüfen ob Sie online sind");
+    }
+    setEmailSending(false);
   }
 
   function handleKaufen() {
@@ -1064,6 +1097,41 @@ export default function App() {
             {copied ? "✓ In Zwischenablage kopiert!" : "Brief kopieren"}
           </Btn>
           <Btn onClick={generateReport} variant="dark">Vollständigen Prüfbericht anzeigen</Btn>
+
+          {/* E-Mail-Versand */}
+          <div style={{ background: C.surface, border: "1px solid " + C.border, borderRadius: 12, padding: "16px", marginTop: 4 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: C.text, marginBottom: 4 }}>
+              ✉ Brief und Bericht per E-Mail erhalten
+            </div>
+            <div style={{ fontSize: 11, color: C.muted, marginBottom: 10, lineHeight: 1.5 }}>
+              Damit Sie jederzeit auf Ihren Brief und Bericht zugreifen können — auch wenn Sie diesen Tab schließen.
+            </div>
+            {emailSent ? (
+              <div style={{ background: C.greenBg, border: "1px solid " + C.green + "40", borderRadius: 8, padding: "10px 14px", fontSize: 13, color: C.green, fontWeight: 600 }}>
+                ✓ E-Mail wurde gesendet an {emailInput}
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <input type="email" placeholder="ihre@email.de" value={emailInput}
+                  autoComplete="off" onPaste={e => e.preventDefault()}
+                  onChange={e => { setEmailInput(e.target.value); setEmailError(""); }}
+                  style={{ background: "#ffffff", border: "1.5px solid " + (emailError && !emailConfirm ? C.red : emailInput && emailConfirm && emailInput !== emailConfirm ? C.red : C.border), borderRadius: 8, padding: "10px 12px", fontSize: 14, fontFamily: "inherit", color: C.text, outline: "none" }} />
+                <input type="email" placeholder="E-Mail-Adresse bestätigen" value={emailConfirm}
+                  autoComplete="off" onPaste={e => e.preventDefault()}
+                  onChange={e => { setEmailConfirm(e.target.value); setEmailError(""); }}
+                  style={{ background: "#ffffff", border: "1.5px solid " + (emailInput && emailConfirm && emailInput !== emailConfirm ? C.red : emailInput && emailConfirm && emailInput === emailConfirm ? C.green + "80" : C.border), borderRadius: 8, padding: "10px 12px", fontSize: 14, fontFamily: "inherit", color: C.text, outline: "none" }} />
+                {emailInput && emailConfirm && emailInput === emailConfirm && (
+                  <div style={{ fontSize: 11, color: C.green }}>✓ E-Mail-Adressen stimmen überein</div>
+                )}
+                <button onClick={() => handleEmailSenden(briefLines.join("\n"), "")}
+                  disabled={emailSending || emailInput !== emailConfirm || !emailInput}
+                  style={{ background: emailSending || emailInput !== emailConfirm || !emailInput ? C.border : C.green, color: emailInput === emailConfirm && emailInput ? "#fff" : C.dim, border: "none", borderRadius: 8, padding: "10px 16px", fontSize: 13, fontFamily: "inherit", fontWeight: 700, cursor: emailSending || emailInput !== emailConfirm || !emailInput ? "not-allowed" : "pointer" }}>
+                  {emailSending ? "Sende..." : "Brief und Bericht senden"}
+                </button>
+              </div>
+            )}
+            {emailError && <div style={{ fontSize: 11, color: C.red, marginTop: 6 }}>{emailError}</div>}
+          </div>
 
           <div style={{ background: C.surface, border: "1px solid " + C.border, borderRadius: 12, padding: "16px" }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: C.gold, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.1em" }}>Versandhinweise</div>
