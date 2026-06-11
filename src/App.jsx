@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { ARTIKEL } from "./artikel.js";
 
 const CONFIG = {
-  STRIPE_PAYMENT_LINK: "https://buy.stripe.com/4gM28r2qn26hf7a0MzgUM00",
+  STRIPE_PAYMENT_LINK: "https://buy.stripe.com/HIER_DEINEN_PAYMENT_LINK_EINTRAGEN",
   PREIS: 7.99,
   RICHTWERTE: {
     gesamt: 2.67, heizung_warmwasser: 1.32, heizung_max: 2.18,
@@ -97,7 +97,17 @@ const fmt = n => (n != null && !isNaN(n)) ? "€ " + parseFloat(n || 0).toFixed(
 const pct = (a, b) => b > 0 ? Math.round((a / b) * 100) : 0;
 
 function checkPaidReturn() {
-  try { return new URLSearchParams(window.location.search).get("paid") === "true"; } catch { return false; }
+  try {
+    const paid = new URLSearchParams(window.location.search).get("paid") === "true";
+    // Nur als bezahlt markieren wenn der Kauf wirklich gestartet wurde
+    // sessionStorage wird beim Öffnen des Stripe-Tabs gesetzt
+    const started = sessionStorage.getItem("kaufStarted") === "true";
+    if (paid && started) {
+      sessionStorage.removeItem("kaufStarted");
+      return true;
+    }
+    return false;
+  } catch { return false; }
 }
 
 const BEWERTUNG = {
@@ -490,6 +500,7 @@ export default function App() {
     }
     if (IS_DEMO) { setUnlocked(true); return; }
     setPayPending(true);
+    try { sessionStorage.setItem("kaufStarted", "true"); } catch {}
     window.open(CONFIG.STRIPE_PAYMENT_LINK + "?success_url=" + encodeURIComponent(window.location.href.split("?")[0] + "?paid=true"), "_blank");
   }
 
