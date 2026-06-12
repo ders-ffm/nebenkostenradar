@@ -16,7 +16,7 @@ const C = {
 };
 
 const DEFAULT_CONFIG = {
-  preis: 3.99,
+  preis: 7.99,
   stripeLink: "",
   texte: {
     headline: "Nebenkostenabrechnung prüfen lassen",
@@ -323,7 +323,7 @@ export default function Admin() {
           <>
             <Card title="Preis & Stripe" icon="💶">
               <Field label="Preis Vollbericht (€)" type="number" value={config.preis}
-                onChange={v => updateConfig("preis", parseFloat(v) || 3.99)}
+                onChange={v => updateConfig("preis", parseFloat(v) || 7.99)}
                 hint="Muss mit dem Preis in deinem Stripe Payment Link übereinstimmen!" />
               <Field label="Stripe Payment Link" value={config.stripeLink}
                 onChange={v => updateConfig("stripeLink", v)}
