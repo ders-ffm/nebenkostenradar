@@ -97,7 +97,11 @@ const fmt = n => (n != null && !isNaN(n)) ? "€ " + parseFloat(n || 0).toFixed(
 const pct = (a, b) => b > 0 ? Math.round((a / b) * 100) : 0;
 
 function checkPaidReturn() {
-  return false; // Freischaltung nur über manuellen Button
+  try {
+    const sessionId = new URLSearchParams(window.location.search).get("session_id");
+    // Echte session_id beginnt mit cs_ — manuelle Eingabe von ?paid=true funktioniert nicht mehr
+    return sessionId && sessionId.startsWith("cs_");
+  } catch { return false; }
 }
 
 const BEWERTUNG = {
@@ -455,6 +459,28 @@ export default function App() {
     setStep("bericht");
   }
 
+  // Wenn Nutzer von Stripe-Tab zurückkommt ohne erfolgreiche Zahlung
+  // wird payPending nach 3 Sekunden zurückgesetzt falls nicht paid=true
+  const handleVisibilityChange = useCallback(() => {
+    if (document.visibilityState === "visible" && payPending) {
+      const paid = new URLSearchParams(window.location.search).get("paid") === "true";
+      if (!paid) {
+        // Kurz warten dann zurücksetzen
+        setTimeout(() => {
+          setPayPending(p => {
+            if (p) return false;
+            return p;
+          });
+        }, 3000);
+      }
+    }
+  }, [payPending]);
+
+  React.useEffect(() => {
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [handleVisibilityChange]);
+
   async function handleEmailSenden(briefText, berichtText) {
     if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
       setEmailError("Bitte gültige E-Mail-Adresse eingeben");
@@ -491,7 +517,7 @@ export default function App() {
     if (IS_DEMO) { setUnlocked(true); return; }
     setPayPending(true);
 
-    window.open(CONFIG.STRIPE_PAYMENT_LINK, "_blank");
+    window.open(CONFIG.STRIPE_PAYMENT_LINK + "?success_url=" + encodeURIComponent(window.location.href.split("?")[0] + "?session_id={CHECKOUT_SESSION_ID}"), "_blank");
   }
 
   function resetAll() {
@@ -898,7 +924,29 @@ export default function App() {
               {payPending ? (
                 <div>
                   <p style={{ fontSize: 12, color: C.muted, textAlign: "center", marginBottom: 12 }}>Zahlung läuft im neuen Tab. Nach Abschluss hier klicken:</p>
-                  <Btn onClick={() => setUnlocked(true)} variant="green" style={{ marginBottom: 8 }}>✓ Bezahlt — Vollbericht anzeigen</Btn>
+                  <Btn onClick={async () => {
+                    const sessionId = new URLSearchParams(window.location.search).get("session_id");
+                    if (!sessionId || !sessionId.startsWith("cs_")) {
+                      alert("Bitte zuerst die Zahlung abschließen.");
+                      return;
+                    }
+                    try {
+                      const res = await fetch("/api/verify-payment", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ sessionId }),
+                      });
+                      const data = await res.json();
+                      if (data.verified) {
+                        setUnlocked(true);
+                      } else {
+                        alert("Zahlung konnte nicht verifiziert werden. Bitte Zahlung abschließen.");
+                      }
+                    } catch {
+                      // Fallback: bei Netzwerkfehler session_id als Beweis akzeptieren
+                      if (sessionId && sessionId.startsWith("cs_")) setUnlocked(true);
+                    }
+                  }} variant="green" style={{ marginBottom: 8 }}>✓ Bezahlt — Vollbericht anzeigen</Btn>
                   <Btn onClick={() => setPayPending(false)} variant="outline">Abbrechen</Btn>
                 </div>
               ) : (
