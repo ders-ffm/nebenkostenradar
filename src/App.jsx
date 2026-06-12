@@ -1548,7 +1548,7 @@ export default function App() {
           <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 10 }}>Kontakt</div>
           <BrandAnschrift />
           <div style={{ fontSize: 13, color: C.muted, lineHeight: 2 }}>
-            <div>Stefan Hennig</div>
+            <div>Inhaber: Stefan Hennig</div>
             <div>Ludwigstr. 33-37, 60327 Frankfurt am Main</div>
             <div>support@nebenkostenradar.com</div>
           </div>
