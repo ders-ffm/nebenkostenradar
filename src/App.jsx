@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ARTIKEL } from "./artikel.js";
 
 const CONFIG = {
@@ -330,6 +330,27 @@ function LegalFooter({ setStep, setPrevStep, currentStep }) {
 
 export default function App() {
   const [step, setStep] = useState("welcome");
+
+  // Browser-Zurück-Button: History API
+  const navigateTo = useCallback((newStep) => {
+    window.history.pushState({ step: newStep }, "", window.location.pathname);
+    setStep(newStep);
+  }, []);
+
+  useEffect(() => {
+    // Initialer Eintrag
+    window.history.replaceState({ step: "welcome" }, "", window.location.pathname);
+    // Browser Zurück-Button
+    const onPop = (e) => {
+      if (e.state && e.state.step) {
+        setStep(e.state.step);
+      } else {
+        navigateTo("welcome");
+      }
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
   const [prevStep, setPrevStep] = useState("welcome");
   const [errors, setErrors] = useState({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -499,7 +520,7 @@ export default function App() {
   }
 
   function resetAll() {
-    setStep("welcome"); setResult(null); setUnlocked(false); setPayPending(false);
+    navigateTo("welcome"); setResult(null); setUnlocked(false); setPayPending(false);
     setErrors({}); setSubmitAttempted(false); setWerte({}); setOpenGruppe("heizung");
   }
 
@@ -518,7 +539,7 @@ export default function App() {
     return (
       <div style={{ borderBottom: "2px solid " + C.border, padding: "0 20px", background: "#fff", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }} onClick={() => setStep("welcome")}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }} onClick={() => navigateTo("welcome")}>
             <div style={{ width: 42, height: 42, borderRadius: 10, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 8px rgba(45,122,79,0.3)" }}>
               <svg width="24" height="24" viewBox="0 0 18 18" fill="none">
                 <circle cx="9" cy="9" r="7" stroke="white" strokeWidth="2"/>
@@ -540,7 +561,7 @@ export default function App() {
                 {item.label}
               </button>
             ))}
-            <button onClick={() => setStep("wohnung")}
+            <button onClick={() => navigateTo("wohnung")}
               style={{ background: C.green, border: "none", borderRadius: 6, padding: "8px 16px", fontSize: 13, fontFamily: "inherit", fontWeight: 700, color: "#fff", cursor: "pointer", marginLeft: 6 }}>
               Kostenlos prüfen
             </button>
@@ -591,7 +612,7 @@ export default function App() {
         </div>
 
         {IS_DEMO && <div style={{ background: C.amberBg, border: "1px solid " + C.amber + "40", borderRadius: 6, padding: "8px 14px", marginBottom: 16, fontSize: 11, color: C.amber }}>Demo-Modus — Stripe nicht konfiguriert</div>}
-        <button onClick={() => setStep("wohnung")}
+        <button onClick={() => navigateTo("wohnung")}
           style={{ width: "100%", background: C.green, color: "#ffffff", border: "none", borderRadius: 8, padding: "16px 24px", fontSize: 16, fontFamily: "inherit", fontWeight: 700, cursor: "pointer", letterSpacing: "0.01em" }}>
           Jetzt kostenlos prüfen
         </button>
@@ -662,7 +683,7 @@ export default function App() {
               </div>
             ))}
           </div>
-          <button onClick={() => setStep("wohnung")}
+          <button onClick={() => navigateTo("wohnung")}
             style={{ width: "100%", background: "#fff", border: "none", borderRadius: 8, padding: "14px", fontSize: 15, fontFamily: "inherit", fontWeight: 700, color: C.green, cursor: "pointer" }}>
             Kostenlos prüfen — Bericht freischalten
           </button>
@@ -683,7 +704,7 @@ export default function App() {
     return (
       <div style={root}>
         <div style={{ background: C.surface, padding: "20px 20px 0", borderBottom: "1px solid " + C.border }}>
-          <button onClick={() => setStep("welcome")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "0 0 12px", fontFamily: "inherit" }}>← Zurück</button>
+          <button onClick={() => navigateTo("welcome")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "0 0 12px", fontFamily: "inherit" }}>← Zurück</button>
           <StepBar current={1} total={3} label="Wohnungsdaten" />
         </div>
         <div style={{ padding: "22px 20px 40px" }}>
@@ -725,7 +746,7 @@ export default function App() {
   if (step === "posten") return (
     <div style={root}>
       <div style={{ background: C.surface, padding: "20px 20px 0", borderBottom: "1px solid " + C.border }}>
-        <button onClick={() => setStep("wohnung")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "0 0 12px", fontFamily: "inherit" }}>← Zurück</button>
+        <button onClick={() => navigateTo("wohnung")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, padding: "0 0 12px", fontFamily: "inherit" }}>← Zurück</button>
         <StepBar current={2} total={3} label="Kostenposten" />
       </div>
       <div style={{ padding: "14px 20px 0" }}>
@@ -962,9 +983,9 @@ export default function App() {
                   )}
                   <div style={{ textAlign: "center", marginTop: 8, fontSize: 10, color: C.dim }}>
                     Mit dem Kauf akzeptierst du unsere{" "}
-                    <button onClick={() => { setPrevStep("result"); setStep("agb"); }} style={{ background: "none", border: "none", color: C.dim, textDecoration: "underline", cursor: "pointer", fontSize: 10, fontFamily: "inherit", padding: 0 }}>AGB</button>
+                    <button onClick={() => { setPrevStep("result"); navigateTo("agb"); }} style={{ background: "none", border: "none", color: C.dim, textDecoration: "underline", cursor: "pointer", fontSize: 10, fontFamily: "inherit", padding: 0 }}>AGB</button>
                     {" "}und{" "}
-                    <button onClick={() => { setPrevStep("result"); setStep("datenschutz"); }} style={{ background: "none", border: "none", color: C.dim, textDecoration: "underline", cursor: "pointer", fontSize: 10, fontFamily: "inherit", padding: 0 }}>Datenschutzerklärung</button>
+                    <button onClick={() => { setPrevStep("result"); navigateTo("datenschutz"); }} style={{ background: "none", border: "none", color: C.dim, textDecoration: "underline", cursor: "pointer", fontSize: 10, fontFamily: "inherit", padding: 0 }}>Datenschutzerklärung</button>
                   </div>
                 </div>
               )}
@@ -1108,12 +1129,50 @@ export default function App() {
           </div>
         </div>
 
-        <div style={{ margin: "16px 20px 0", background: "#fafafa", border: "1px solid #dde1e7", borderRadius: 12, overflow: "hidden" }}>
-          <div style={{ background: "#f0f2f4", padding: "8px 16px", borderBottom: "1px solid #dde1e7", display: "flex", alignItems: "center", gap: 8 }}>
-            {["#e05252", "#e8a642", "#4caf7d"].map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />)}
-            <span style={{ fontSize: 11, color: "#999", marginLeft: 8 }}>Widerspruch_{wohnung.jahr}.txt</span>
+        {/* DIN 5008 Geschäftsbrief mit Branding */}
+        <div style={{ margin: "16px 20px 0", background: "#ffffff", border: "1.5px solid " + C.border, borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.08)" }}>
+
+          {/* Briefkopf */}
+          <div style={{ padding: "20px 28px 16px", borderBottom: "2px solid " + C.border, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            {/* Logo — wie im App-Header */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 38, height: 38, borderRadius: 8, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 2px 6px rgba(45,122,79,0.25)" }}>
+                <svg width="20" height="20" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                  <circle cx="9" cy="9" r="7" stroke="white" strokeWidth="2"/>
+                  <circle cx="9" cy="9" r="3.5" stroke="white" strokeWidth="1.5"/>
+                  <circle cx="9" cy="9" r="1" fill="white"/>
+                  <line x1="9" y1="2" x2="14" y2="5" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: C.text, letterSpacing: "-0.02em", lineHeight: 1.1 }}>
+                  Nebenkosten<span style={{ color: C.green }}>Radar</span><span style={{ color: C.text, fontWeight: 400 }}>.com</span>
+                </div>
+                <div style={{ fontSize: 10, color: C.muted, marginTop: 2, letterSpacing: "0.02em" }}>Unabhängige Abrechnungsprüfung</div>
+              </div>
+            </div>
+            {/* Rechts: Dokument-Info */}
+            <div style={{ textAlign: "right", fontSize: 11, color: C.muted, lineHeight: 1.7 }}>
+              <div style={{ fontWeight: 600, color: C.text }}>Widerspruchsbrief {wohnung.jahr}</div>
+              <div style={{ fontSize: 10, color: C.dim }}>{new Date().toLocaleDateString("de-DE")}</div>
+            </div>
           </div>
-          <pre style={{ padding: "20px", fontFamily: "'Courier New',monospace", fontSize: 11.5, color: "#1a1a1a", lineHeight: 1.9, whiteSpace: "pre-wrap", maxHeight: 420, overflowY: "auto", margin: 0 }}>{briefText}</pre>
+
+          {/* Absenderzeile über Empfänger (DIN 5008) */}
+          <div style={{ padding: "10px 28px", fontSize: 10, color: C.dim, borderBottom: "1px solid " + C.border, background: C.surface }}>
+            {adressen.mieterName} · {adressen.mieterStrasse} · {adressen.mieterPlz} {adressen.mieterOrt}
+          </div>
+
+          {/* Briefinhalt */}
+          <div style={{ padding: "20px 28px 24px", fontFamily: "'Inter','Segoe UI','Helvetica Neue',Arial,sans-serif", fontSize: 13.5, color: "#1a1a1a", lineHeight: 1.95, whiteSpace: "pre-wrap", maxHeight: 440, overflowY: "auto" }}>
+            {briefText}
+          </div>
+
+          {/* Fußzeile */}
+          <div style={{ borderTop: "1px solid " + C.border, padding: "8px 28px", background: C.surface, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ fontSize: 10, color: C.dim }}>Erstellt mit NebenkostenRadar · nebenkostenradar.com</div>
+            <div style={{ fontSize: 10, color: C.dim }}>{new Date().toLocaleDateString("de-DE")}</div>
+          </div>
         </div>
 
         <div style={{ padding: "16px 20px 40px", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -1360,14 +1419,14 @@ export default function App() {
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px 60px" }}>
         <div style={{ marginBottom: 8 }}>
-          <button onClick={() => setStep("welcome")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, fontFamily: "inherit", padding: 0 }}>← Startseite</button>
+          <button onClick={() => navigateTo("welcome")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, fontFamily: "inherit", padding: 0 }}>← Startseite</button>
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 800, color: C.text, margin: "0 0 8px", letterSpacing: "-0.02em" }}>Ratgeber Mietrecht</h1>
         <p style={{ fontSize: 15, color: C.muted, margin: "0 0 32px", lineHeight: 1.6 }}>Fundierte Informationen zu Nebenkostenabrechnungen, Fristen und Ihren Rechten als Mieter — kostenlos und aktuell.</p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {ARTIKEL.map(a => (
-            <div key={a.id} onClick={() => { setRatgeberArtikel(a.id); setStep("artikel"); }}
+            <div key={a.id} onClick={() => { setRatgeberArtikel(a.id); navigateTo("artikel"); }}
               style={{ background: "#fff", border: "1px solid " + C.border, borderRadius: 12, overflow: "hidden", cursor: "pointer", transition: "box-shadow 0.15s" }}
               onMouseEnter={e => e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.1)"}
               onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
@@ -1398,13 +1457,13 @@ export default function App() {
         {/* Nav */}
         <div style={{ borderBottom: "2px solid " + C.border, padding: "0 20px", background: "#fff", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}>
           <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => setStep("welcome")}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigateTo("welcome")}>
               <div style={{ width: 32, height: 32, borderRadius: 8, background: C.green, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <div style={{ width: 12, height: 12, borderRadius: "50%", border: "2.5px solid #fff" }} />
               </div>
               <span style={{ fontSize: 16, fontWeight: 800, color: C.text, letterSpacing: "-0.02em" }}>NebenkostenRadar</span>
             </div>
-            <button onClick={() => setStep("wohnung")}
+            <button onClick={() => navigateTo("wohnung")}
               style={{ background: C.green, border: "none", borderRadius: 6, padding: "8px 16px", fontSize: 13, fontFamily: "inherit", fontWeight: 700, color: "#fff", cursor: "pointer" }}>
               Jetzt prüfen
             </button>
@@ -1412,7 +1471,7 @@ export default function App() {
         </div>
 
         <div style={{ maxWidth: 720, margin: "0 auto", padding: "24px 20px 60px" }}>
-          <button onClick={() => setStep("ratgeber")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, fontFamily: "inherit", padding: "0 0 20px" }}>← Ratgeber</button>
+          <button onClick={() => navigateTo("ratgeber")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, fontFamily: "inherit", padding: "0 0 20px" }}>← Ratgeber</button>
 
           {/* Hero Bild */}
           <img src={artikel.bild} alt={artikel.bildAlt} style={{ width: "100%", height: 220, objectFit: "cover", borderRadius: 10, marginBottom: 24 }} />
@@ -1472,7 +1531,7 @@ export default function App() {
             if (block.typ === "cta") return (
               <div key={i} style={{ background: C.green, borderRadius: 10, padding: "18px 20px", margin: "24px 0", textAlign: "center" }}>
                 <p style={{ color: "#fff", fontSize: 14, margin: "0 0 12px", lineHeight: 1.6 }}>{block.text}</p>
-                <button onClick={() => setStep("wohnung")}
+                <button onClick={() => navigateTo("wohnung")}
                   style={{ background: "#fff", border: "none", borderRadius: 6, padding: "10px 24px", fontSize: 14, fontFamily: "inherit", fontWeight: 700, color: C.green, cursor: "pointer" }}>
                   Kostenlos prüfen →
                 </button>
@@ -1508,13 +1567,13 @@ export default function App() {
     <div style={root}>
       <div style={{ borderBottom: "2px solid " + C.border, padding: "0 20px", background: "#fff", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 1px 8px rgba(0,0,0,0.06)" }}>
         <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => setStep("welcome")}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigateTo("welcome")}>
             <div style={{ width: 32, height: 32, borderRadius: 8, background: C.green, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <div style={{ width: 12, height: 12, borderRadius: "50%", border: "2.5px solid #fff" }} />
             </div>
             <span style={{ fontSize: 16, fontWeight: 800, color: C.text, letterSpacing: "-0.02em" }}>NebenkostenRadar</span>
           </div>
-          <button onClick={() => setStep("wohnung")}
+          <button onClick={() => navigateTo("wohnung")}
             style={{ background: C.green, border: "none", borderRadius: 6, padding: "8px 16px", fontSize: 13, fontFamily: "inherit", fontWeight: 700, color: "#fff", cursor: "pointer" }}>
             Jetzt prüfen
           </button>
@@ -1522,7 +1581,7 @@ export default function App() {
       </div>
 
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "32px 20px 60px" }}>
-        <button onClick={() => setStep("welcome")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, fontFamily: "inherit", padding: "0 0 20px" }}>← Startseite</button>
+        <button onClick={() => navigateTo("welcome")} style={{ background: "none", border: "none", color: C.muted, cursor: "pointer", fontSize: 13, fontFamily: "inherit", padding: "0 0 20px" }}>← Startseite</button>
 
         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80" alt="Modernes Bürogebäude in Frankfurt" style={{ width: "100%", height: 200, objectFit: "cover", borderRadius: 10, marginBottom: 28 }} />
 
