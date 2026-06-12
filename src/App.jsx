@@ -1228,9 +1228,9 @@ export default function App() {
       </div>
       <div style={{ padding: "24px 20px 60px" }}>
         {[
-          { t: "Angaben gemäß § 5 TMG", brand: true, lines: ["NebenkostenRadar — nebenkostenradar.com", "Stefan Hennig", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
+          { t: "Angaben gemäß § 5 TMG", brand: true, lines: ["NebenkostenRadar — nebenkostenradar.com", "Inhaber: Stefan Hennig", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
           { t: "Kontakt", lines: ["", "E-Mail: support@nebenkostenradar.com"] },
-          { t: "Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV", lines: ["Stefan Hennig", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
+          { t: "Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV", lines: ["Inhaber: Stefan Hennig", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
           { t: "Haftungsausschluss", lines: ["Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität können wir keine Gewähr übernehmen."] },
           { t: "Haftung für Links", lines: ["Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben."] },
           { t: "Streitschlichtung", lines: ["Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung bereit: https://ec.europa.eu/consumers/odr/", "Wir nehmen nicht an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil."] },
@@ -1260,7 +1260,7 @@ export default function App() {
       </div>
       <div style={{ padding: "24px 20px 60px" }}>
         {[
-          { t: "1. Verantwortlicher", brand: true, lines: ["NebenkostenRadar — nebenkostenradar.com", "Inhaber: Stefan Hennig (Einzelunternehmer)", "Ludwigstr. 33-37, 60327 Frankfurt am Main", "support@nebenkostenradar.com"] },
+          { t: "1. Verantwortlicher", brand: true, lines: ["NebenkostenRadar — nebenkostenradar.com", "Inhaber: Stefan Hennig", "Ludwigstr. 33-37, 60327 Frankfurt am Main", "support@nebenkostenradar.com"] },
           { t: "2. Keine Datenspeicherung", lines: ["Diese Website speichert keine personenbezogenen Daten. Alle eingegebenen Werte (Nebenkostenposten, Wohnungsdaten) werden ausschließlich lokal in Ihrem Browser verarbeitet."] },
           { t: "3. Keine Cookies", lines: ["Diese Website verwendet keine Tracking-Cookies, kein Webanalyse-Tool und keine Social-Media-Plugins. Es werden keine Cookies gesetzt, die einer Einwilligung bedürfen. Technisch notwendige Cookies (Session-Cookies) werden nur zur Bereitstellung der Website-Funktion verwendet und sind gemäß § 25 Abs. 2 TDDDG ohne Einwilligung zulässig."] },
           { t: "4. Hosting (Vercel)", lines: ["Unser Hosting-Anbieter Vercel (Vercel Inc., 340 S Lemon Ave, Walnut, CA 91789, USA) erhebt automatisch Server-Log-Dateien (IP-Adresse, Browser, Zeitstempel). Diese Daten werden nicht mit anderen Daten zusammengeführt. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am technischen Betrieb). Datenschutzerklärung Vercel: vercel.com/legal/privacy-policy"] },
@@ -1297,7 +1297,7 @@ export default function App() {
         {[
           { t: "§ 1 Geltungsbereich", lines: [
             "Diese AGB gelten für alle Käufe digitaler Inhalte über nebenkostenradar.com.",
-            "Anbieter: NebenkostenRadar (nebenkostenradar.com), Inhaber: Stefan Hennig (Einzelunternehmer), Ludwigstr. 33-37, 60327 Frankfurt am Main, support@nebenkostenradar.com",
+            "Anbieter: NebenkostenRadar (nebenkostenradar.com), Inhaber: Stefan Hennig, Ludwigstr. 33-37, 60327 Frankfurt am Main, support@nebenkostenradar.com",
           ]},
           { t: "§ 2 Vertragsgegenstand", lines: [
             "Gegenstand ist die einmalige Freischaltung eines digitalen Prüfberichts zur Nebenkostenabrechnung.",
@@ -1548,7 +1548,7 @@ export default function App() {
           <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 10 }}>Kontakt</div>
           <BrandAnschrift />
           <div style={{ fontSize: 13, color: C.muted, lineHeight: 2 }}>
-            <div>Inhaber: Stefan Hennig (Einzelunternehmer)</div>
+            <div>Stefan Hennig</div>
             <div>Ludwigstr. 33-37, 60327 Frankfurt am Main</div>
             <div>support@nebenkostenradar.com</div>
           </div>
