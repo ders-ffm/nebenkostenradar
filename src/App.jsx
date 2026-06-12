@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { ARTIKEL } from "./artikel.js";
 
 const CONFIG = {
@@ -476,7 +476,7 @@ export default function App() {
     }
   }, [payPending]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, [handleVisibilityChange]);
