@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { ARTIKEL } from "./artikel.js";
 
 const CONFIG = {
@@ -458,28 +458,6 @@ export default function App() {
     setReportContent(lines.join("\n"));
     setStep("bericht");
   }
-
-  // Wenn Nutzer von Stripe-Tab zurückkommt ohne erfolgreiche Zahlung
-  // wird payPending nach 3 Sekunden zurückgesetzt falls nicht paid=true
-  const handleVisibilityChange = useCallback(() => {
-    if (document.visibilityState === "visible" && payPending) {
-      const paid = new URLSearchParams(window.location.search).get("paid") === "true";
-      if (!paid) {
-        // Kurz warten dann zurücksetzen
-        setTimeout(() => {
-          setPayPending(p => {
-            if (p) return false;
-            return p;
-          });
-        }, 3000);
-      }
-    }
-  }, [payPending]);
-
-  useEffect(() => {
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [handleVisibilityChange]);
 
   async function handleEmailSenden(briefText, berichtText) {
     if (!emailInput || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput)) {
