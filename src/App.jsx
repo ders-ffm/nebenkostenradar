@@ -15,7 +15,7 @@ const CONFIG = {
 const IS_DEMO = CONFIG.STRIPE_PAYMENT_LINK.includes("HIER");
 
 const C = {
-  bg: "#ffffff", surface: "#f8f9fa", high: "#f0f2f4", border: "#dde1e7",
+  bg: "#ffffff", surface: "#f8f9fa", high: "#f0f2f4", border: "#b8bfc9",
   gold: "#2d7a4f", goldD: "#1d5235", goldBg: "#eaf4ee",
   text: "#1a1a1a", muted: "#555e68", dim: "#6b7280",
   green: "#2d7a4f", greenBg: "#eaf4ee",
@@ -636,53 +636,41 @@ export default function App() {
         </div>
       </div>
 
-      {/* Was kostet was */}
+      {/* Leistungsübersicht — nur Premium */}
       <div style={{ padding: "36px 24px", borderBottom: "1px solid " + C.border, maxWidth: 680, margin: "0 auto", width: "100%", boxSizing: "border-box", textAlign: "center" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 24, textTransform: "uppercase", letterSpacing: "0.08em" }}>Leistungsübersicht</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-
-          {/* Basisanalyse */}
-          <div style={{ background: C.surface, border: "1px solid " + C.border, borderRadius: 10, padding: "22px 18px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: C.muted, textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>Basisanalyse</div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: C.text, marginBottom: 4 }}>Kostenlos</div>
-            <div style={{ fontSize: 11, color: C.dim, marginBottom: 18 }}>Keine Registrierung</div>
-            <div style={{ width: "100%", borderTop: "1px solid " + C.border, paddingTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-              {["Gesamtbewertung mit Ampelsystem", "€/m²-Vergleich mit DMB-Richtwert 2024", "Vorschau der ersten 3 Posten"].map(item => (
-                <div key={item} style={{ display: "flex", gap: 8, alignItems: "flex-start", textAlign: "left" }}>
-                  <span style={{ color: C.green, fontSize: 11, flexShrink: 0, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 11, color: C.muted, lineHeight: 1.4 }}>{item}</span>
-                </div>
-              ))}
-            </div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: C.text, marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.08em" }}>Was Sie erhalten</div>
+        <p style={{ fontSize: 14, color: C.muted, margin: "0 0 24px", lineHeight: 1.6 }}>
+          Die Basisanalyse ist kostenlos. Für €{CONFIG.PREIS.toFixed(2)} einmalig erhalten Sie den vollständigen Prüfbericht:
+        </p>
+        <div style={{ background: C.green, borderRadius: 12, padding: "28px 24px", maxWidth: 420, margin: "0 auto" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: "-0.01em" }}>Premiumanalyse</div>
+            <div style={{ background: "rgba(255,255,255,0.2)", borderRadius: 20, padding: "4px 14px", fontSize: 12, color: "#fff", fontWeight: 700 }}>€{CONFIG.PREIS.toFixed(2)} einmalig</div>
           </div>
-
-          {/* Premium */}
-          <div style={{ background: C.green, border: "2px solid " + C.green, borderRadius: 10, padding: "22px 18px", display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}>
-            <div style={{ position: "absolute", top: -11, left: "50%", transform: "translateX(-50%)", background: C.text, color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", padding: "3px 12px", borderRadius: 20, textTransform: "uppercase", whiteSpace: "nowrap" }}>Empfohlen</div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8, opacity: 0.85 }}>Premiumanalyse</div>
-            <div style={{ fontSize: 28, fontWeight: 700, color: "#fff", marginBottom: 2 }}>€{CONFIG.PREIS.toFixed(2)}</div>
-            <div style={{ fontSize: 11, color: "#fff", marginBottom: 18, opacity: 0.8 }}>Einmalig · Kein Abo</div>
-            <div style={{ width: "100%", borderTop: "1px solid rgba(255,255,255,0.3)", paddingTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-              {[
-                "Alle Posten mit Richtwerten & Abweichung",
-                "Widerspruchsgründe mit §§ Rechtsgrundlagen",
-                "Fristen nach § 556 Abs. 3 BGB",
-                "Nächste Schritte konkret formuliert",
-                "Versandfertiger Widerspruchsbrief",
-                "Vollständiger Prüfbericht zum Kopieren",
-              ].map(item => (
-                <div key={item} style={{ display: "flex", gap: 8, alignItems: "flex-start", textAlign: "left" }}>
-                  <span style={{ color: "#fff", fontSize: 11, flexShrink: 0, marginTop: 1 }}>✓</span>
-                  <span style={{ fontSize: 11, color: "#fff", lineHeight: 1.4 }}>{item}</span>
-                </div>
-              ))}
-            </div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.25)", paddingTop: 18, display: "flex", flexDirection: "column", gap: 10, marginBottom: 22, textAlign: "left" }}>
+            {[
+              "Alle Posten mit Richtwerten und Abweichungsprozent",
+              "Widerspruchsgründe mit §§ Rechtsgrundlagen",
+              "Fristen nach § 556 Abs. 3 BGB",
+              "Nächste Schritte konkret formuliert",
+              "Versandfertiger Widerspruchsbrief",
+              "Prüfbericht per E-Mail zugesandt",
+            ].map(item => (
+              <div key={item} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                <span style={{ color: "#fff", fontSize: 13, flexShrink: 0, marginTop: 1, fontWeight: 700 }}>✓</span>
+                <span style={{ fontSize: 14, color: "#fff", lineHeight: 1.45 }}>{item}</span>
+              </div>
+            ))}
           </div>
-
+          <button onClick={() => setStep("wohnung")}
+            style={{ width: "100%", background: "#fff", border: "none", borderRadius: 8, padding: "14px", fontSize: 15, fontFamily: "inherit", fontWeight: 700, color: C.green, cursor: "pointer" }}>
+            Kostenlos prüfen — Bericht freischalten
+          </button>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.75)", marginTop: 10 }}>Kein Abo · Einmalige Zahlung · Sofortiger Zugang</div>
         </div>
       </div>
 
-      <LegalFooter setStep={setStep} setPrevStep={setPrevStep} currentStep="welcome" />
+            <LegalFooter setStep={setStep} setPrevStep={setPrevStep} currentStep="welcome" />
     </div>
   );
 
@@ -1240,7 +1228,7 @@ export default function App() {
       </div>
       <div style={{ padding: "24px 20px 60px" }}>
         {[
-          { t: "Angaben gemäß § 5 TMG", brand: true, lines: ["NebenkostenRadar — nebenkostenradar.com", "Inhaber: Stefan Hennig (Einzelunternehmer)", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
+          { t: "Angaben gemäß § 5 TMG", brand: true, lines: ["NebenkostenRadar — nebenkostenradar.com", "Stefan Hennig", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
           { t: "Kontakt", lines: ["", "E-Mail: support@nebenkostenradar.com"] },
           { t: "Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV", lines: ["Stefan Hennig", "Ludwigstr. 33-37", "60327 Frankfurt am Main"] },
           { t: "Haftungsausschluss", lines: ["Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität können wir keine Gewähr übernehmen."] },
@@ -1257,7 +1245,7 @@ export default function App() {
           </div>
         ))}
         <div style={{ background: C.amberBg, border: "1px solid " + C.amber + "30", borderLeft: "3px solid " + C.amber, borderRadius: 10, padding: "12px 16px", fontSize: 12, color: C.amber, lineHeight: 1.7 }}>
-          Impressum vollständig. Bei Änderungen: src/App.jsx → Impressum-Bereich anpassen.
+          
         </div>
       </div>
     </div>
@@ -1349,7 +1337,7 @@ export default function App() {
           <div key={i} style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: C.gold, marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.08em" }}>{s.t}</div>
             {s.lines.map((line, j) => (
-              <div key={j} style={{ fontSize: 13, color: C.muted, lineHeight: 1.8, marginBottom: 6 }}>{line}</div>
+              <div key={j} style={{ fontSize: 15, color: C.text, lineHeight: 1.9, marginBottom: 8 }}>{line}</div>
             ))}
           </div>
         ))}
