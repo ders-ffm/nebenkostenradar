@@ -628,7 +628,7 @@ export default function App() {
             ["Vollständige Prüfung aller Posten", "Jede Position wird gegen den DMB-Betriebskostenspiegel 2024 verglichen und auf rechtliche Zulässigkeit nach BetrKV § 2 geprüft."],
             ["Erkennung nicht umlagefähiger Kosten", "Wir erkennen Posten die Ihr Vermieter nicht abrechnen darf — z.B. Verwaltungskosten, Reparaturen oder seit Juli 2024 den Kabelanschluss."],
             ["Heizkostenverordnung & CO₂-Abgabe", "Prüfung der 50/70-Regel nach HeizkostenV sowie der korrekten Aufteilung der CO₂-Abgabe nach CO₂KostAufG."],
-            ["Versandfertiger Prüfbericht mit Mustertext", "Bei Auffälligkeiten erstellen wir einen vollständigen Prüfbericht mit Mustertext mit den korrekten Rechtsgrundlagen — sofort verwendbar."],
+            ["Versandfertiger Prüfbericht mit Mustertext", "Bei Auffälligkeiten erstellen wir einen vollständigen Prüfbericht mit korrekten Rechtsgrundlagen und einem vorausgefüllten Musterschreiben — sofort verwendbar."],
           ].map(([title, desc]) => (
             <div key={title} style={{ display: "flex", gap: 14, alignItems: "flex-start", padding: "14px 16px", background: C.surface, border: "1px solid " + C.border, borderRadius: 8, textAlign: "left" }}>
               <div style={{ width: 20, height: 20, borderRadius: "50%", background: C.green, flexShrink: 0, marginTop: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
