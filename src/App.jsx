@@ -20,16 +20,7 @@ function CookieBanner() {
 function accept() {
   localStorage.setItem('nkr-ck', '1');
   setVisible(false);
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-S7JGMF2KP4';
-  s.onload = function() {
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){window.dataLayer.push(arguments);}
-    window.gtag('js', new Date());
-    window.gtag('config', 'G-S7JGMF2KP4');
-  };
-  document.head.appendChild(s);
+  window.gtag && window.gtag('consent', 'update', { analytics_storage: 'granted' });
 }
   function reject() {
     localStorage.setItem('nkr-ck', '0');
