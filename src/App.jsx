@@ -12,6 +12,42 @@ const CONFIG = {
     aufzug: 0.18, schornstein: 0.04,
   },
 };
+function CookieBanner() {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    if (!localStorage.getItem('nkr-ck')) setVisible(true);
+  }, []);
+  function accept() {
+    localStorage.setItem('nkr-ck', '1');
+    setVisible(false);
+    window.gtag && window.gtag('consent', 'update', { analytics_storage: 'granted' });
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=G-S7JGMF2KP4';
+    document.head.appendChild(s);
+    window.gtag && window.gtag('config', 'G-S7JGMF2KP4');
+  }
+  function reject() {
+    localStorage.setItem('nkr-ck', '0');
+    setVisible(false);
+  }
+  if (!visible) return null;
+  return (
+    <div style={{ position:'fixed', bottom:0, left:0, right:0, zIndex:9999, background:'#0A1628', borderTop:'3px solid #1B6FE8', padding:'16px 20px' }}>
+      <div style={{ maxWidth:900, margin:'0 auto', display:'flex', alignItems:'flex-start', gap:20, flexWrap:'wrap' }}>
+        <div style={{ flex:1, fontSize:12, color:'#9BAEC8', lineHeight:1.6 }}>
+          <strong style={{ color:'#fff' }}>Ihre Privatsphäre</strong><br/>
+          Wir verwenden Google Analytics nur mit Ihrer Einwilligung. Technisch notwendige Cookies sind immer aktiv.{' '}
+          <a href="#datenschutz" style={{ color:'#1B6FE8' }}>Mehr erfahren</a>
+        </div>
+        <div style={{ display:'flex', gap:8, alignItems:'center', flexShrink:0 }}>
+          <button onClick={accept} style={{ background:'#1B6FE8', color:'#fff', border:'none', borderRadius:6, padding:'9px 18px', fontSize:12, fontWeight:700, cursor:'pointer' }}>Akzeptieren</button>
+          <button onClick={reject} style={{ background:'transparent', color:'#7A90A8', border:'1px solid #2A3F5A', borderRadius:6, padding:'9px 14px', fontSize:12, cursor:'pointer' }}>Nur notwendige</button>
+        </div>
+      </div>
+    </div>
+  );
+}
 const IS_DEMO = CONFIG.STRIPE_PAYMENT_LINK.includes("HIER");
 
 const C = {
@@ -574,7 +610,7 @@ export default function App() {
   // ── WELCOME ──────────────────────────────────────────────────────────────────
   if (step === "welcome") return (
     <div style={root}>
-
+      <CookieBanner />
       <Nav activeStep="welcome" />
 
 
