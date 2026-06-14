@@ -2,28 +2,27 @@ name: Rechtsmonitor – Artikel Generator
 
 on:
   schedule:
-    - cron: '0 8 1 * *'  # Jeden 1. des Monats um 8:00 UTC
-  workflow_dispatch:       # Manueller Start jederzeit möglich
+    - cron: '0 8 1 * *'
+  workflow_dispatch:
 
 jobs:
   rechtsmonitor:
     runs-on: ubuntu-latest
-
     steps:
       - name: Repository auschecken
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-- name: Node.js einrichten
+      - name: Node.js einrichten
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Abhängigkeiten installieren
+      - name: Abhaengigkeiten installieren
         run: npm install
 
-      - name: Rechtsmonitor ausführen
+      - name: Rechtsmonitor ausfuehren
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
@@ -34,5 +33,5 @@ jobs:
           git config --global user.name "Rechtsmonitor Bot"
           git config --global user.email "bot@nebenkostenradar.com"
           git add src/artikel.js public/sitemap.xml
-          git diff --staged --quiet || git commit -m "Automatisch: Neue Ratgeber-Artikel $(date +'%Y-%m')"
+          git diff --staged --quiet || git commit -m "Automatisch: Neue Artikel $(date +'%Y-%m')"
           git push
