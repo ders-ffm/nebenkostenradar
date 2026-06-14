@@ -31,7 +31,6 @@ function accept() {
   };
   document.head.appendChild(s);
 }
-  }
   function reject() {
     localStorage.setItem('nkr-ck', '0');
     setVisible(false);
