@@ -245,7 +245,7 @@ function buildResult(w, wohn) {
     posten_bewertung, widerspruchsgruende: widerspruch,
     fristen_hinweis: "Widerspruchsfrist: 12 Monate nach Erhalt der Abrechnung (§ 556 Abs. 3 BGB). Für Abrechnungsjahr " + wohn.jahr + " endet die Frist typisch Ende " + (parseInt(wohn.jahr) + 2) + ". Sofort handeln!",
     naechste_schritte: [
-      widerspruch.length > 0 ? "Widerspruchsbrief per Einschreiben senden" : "Belege beim Vermieter anfordern (§ 259 BGB)",
+      widerspruch.length > 0 ? "Prüfbericht mit Mustertext per Einschreiben senden" : "Belege beim Vermieter anfordern (§ 259 BGB)",
       "Originalbelege einsehen — dieses Recht besteht unabhängig vom Ergebnis",
       "Bei Ablehnung: Deutschen Mieterbund einschalten (mieterbund.de · Tel. 030 223230)",
     ],
@@ -628,7 +628,7 @@ export default function App() {
             ["Vollständige Prüfung aller Posten", "Jede Position wird gegen den DMB-Betriebskostenspiegel 2024 verglichen und auf rechtliche Zulässigkeit nach BetrKV § 2 geprüft."],
             ["Erkennung nicht umlagefähiger Kosten", "Wir erkennen Posten die Ihr Vermieter nicht abrechnen darf — z.B. Verwaltungskosten, Reparaturen oder seit Juli 2024 den Kabelanschluss."],
             ["Heizkostenverordnung & CO₂-Abgabe", "Prüfung der 50/70-Regel nach HeizkostenV sowie der korrekten Aufteilung der CO₂-Abgabe nach CO₂KostAufG."],
-            ["Versandfertiger Widerspruchsbrief", "Bei Auffälligkeiten erstellen wir einen vollständigen Widerspruchsbrief mit den korrekten Rechtsgrundlagen — sofort verwendbar."],
+            ["Versandfertiger Prüfbericht mit Mustertext", "Bei Auffälligkeiten erstellen wir einen vollständigen Prüfbericht mit Mustertext mit den korrekten Rechtsgrundlagen — sofort verwendbar."],
           ].map(([title, desc]) => (
             <div key={title} style={{ display: "flex", gap: 14, alignItems: "flex-start", padding: "14px 16px", background: C.surface, border: "1px solid " + C.border, borderRadius: 8, textAlign: "left" }}>
               <div style={{ width: 20, height: 20, borderRadius: "50%", background: C.green, flexShrink: 0, marginTop: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -705,7 +705,7 @@ export default function App() {
               "Widerspruchsgründe mit §§ Rechtsgrundlagen",
               "Fristen nach § 556 Abs. 3 BGB",
               "Nächste Schritte konkret formuliert",
-              "Versandfertiger Widerspruchsbrief",
+              "Versandfertiger Prüfbericht mit Mustertext",
               "Prüfbericht per E-Mail zugesandt",
             ].map(item => (
               <div key={item} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
@@ -1155,7 +1155,7 @@ export default function App() {
             <div style={{ fontSize: 10, color: C.goldD, letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 4 }}>NebenkostenRadar</div>
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <h2 style={{ margin: 0, fontSize: 19, fontWeight: 600 }}>Widerspruchsbrief</h2>
+            <h2 style={{ margin: 0, fontSize: 19, fontWeight: 600 }}>Prüfbericht mit Mustertext</h2>
             <div style={{ background: C.greenBg, border: "1px solid " + C.green + "30", borderRadius: 20, padding: "4px 12px", fontSize: 11, color: C.green, fontWeight: 700 }}>✓ Versandfertig</div>
           </div>
         </div>
@@ -1184,7 +1184,7 @@ export default function App() {
             </div>
             {/* Rechts: Dokument-Info */}
             <div style={{ textAlign: "right", fontSize: 11, color: C.muted, lineHeight: 1.7 }}>
-              <div style={{ fontWeight: 600, color: C.text }}>Widerspruchsbrief {wohnung.jahr}</div>
+              <div style={{ fontWeight: 600, color: C.text }}>Prüfbericht mit Mustertext {wohnung.jahr}</div>
               <div style={{ fontSize: 10, color: C.dim }}>{new Date().toLocaleDateString("de-DE")}</div>
             </div>
           </div>
@@ -1304,7 +1304,7 @@ export default function App() {
         <div style={{ background: C.surface, border: "1px solid " + C.border, borderRadius: 12, padding: "14px 16px", fontSize: 12, color: C.muted, lineHeight: 1.7 }}>
           Den kopierten Text in Word, Pages oder Notes einfügen und speichern.
         </div>
-        <Btn onClick={() => { setErrors({}); setStep(adressen.mieterName && adressen.vermieterName ? "dokument" : "adressen"); }} variant="outline">← Zurück zum Widerspruchsbrief</Btn>
+        <Btn onClick={() => { setErrors({}); setStep(adressen.mieterName && adressen.vermieterName ? "dokument" : "adressen"); }} variant="outline">← Zurück zum Prüfbericht mit Mustertext</Btn>
       </div>
     </div>
   );
@@ -1391,7 +1391,7 @@ export default function App() {
           ]},
           { t: "§ 2 Vertragsgegenstand", lines: [
             "Gegenstand ist die einmalige Freischaltung eines digitalen Prüfberichts zur Nebenkostenabrechnung.",
-            "Der Vollbericht umfasst: vollständige Posten-Bewertung, Widerspruchsgründe mit Rechtsgrundlagen, Fristen, nächste Schritte und einen Muster-Widerspruchsbrief.",
+            "Der Vollbericht umfasst: vollständige Posten-Bewertung, Widerspruchsgründe mit Rechtsgrundlagen, Fristen, nächste Schritte und einen Muster-Prüfbericht mit Mustertext.",
           ]},
           { t: "§ 3 Vertragsschluss und Vertragsspeicherung", lines: [
             "Der Vertrag kommt mit Abschluss der Zahlung über Stripe zustande.",
@@ -1626,7 +1626,7 @@ export default function App() {
           { titel: "Unser Ansatz", text: "Wir kombinieren systematische Regelprüfung nach BetrKV, HeizkostenV und CO₂KostAufG mit dem aktuellen DMB-Betriebskostenspiegel. Jeder Posten wird automatisch auf Zulässigkeit und Plausibilität geprüft. Das Ergebnis ist nachvollziehbar, mit konkreten Rechtsgrundlagen belegt." },
           { titel: "Unabhängigkeit", text: "NebenkostenRadar hat keine Verbindungen zu Vermietern, Hausverwaltungen oder Immobiliengesellschaften. Wir arbeiten ausschließlich im Interesse der Mieter. Unsere Prüfergebnisse sind nicht käuflich." },
           { titel: "Aktualität", text: "Gesetzliche Änderungen — wie das Ende des Kabelanschluss-Nebenkostenprivilegs im Juli 2024 — fließen unmittelbar in unsere Prüflogik ein. Richtwerte werden jährlich nach dem DMB-Betriebskostenspiegel aktualisiert." },
-          { titel: "Transparenz bei den Kosten", text: "Die Basisanalyse ist kostenlos und ohne Registrierung verfügbar. Der vollständige Prüfbericht mit Widerspruchsbrief kostet einmalig €7,99 — ohne Abo, ohne versteckte Folgekosten." },
+          { titel: "Transparenz bei den Kosten", text: "Die Basisanalyse ist kostenlos und ohne Registrierung verfügbar. Der vollständige Prüfbericht mit Prüfbericht mit Mustertext kostet einmalig €7,99 — ohne Abo, ohne versteckte Folgekosten." },
         ].map((s, i) => (
           <div key={i} style={{ marginBottom: 24, paddingBottom: 24, borderBottom: i < 3 ? "1px solid " + C.border : "none" }}>
             <h2 style={{ fontSize: 17, fontWeight: 700, color: C.text, margin: "0 0 10px" }}>{s.titel}</h2>
