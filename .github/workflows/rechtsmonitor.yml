@@ -15,11 +15,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Node.js einrichten
+- name: Node.js einrichten
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Abhängigkeiten installieren
         run: npm install
